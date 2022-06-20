@@ -24,12 +24,12 @@ app.use(express.urlencoded({ extended: false }));
 
 const DATABASE_URL = process.env.DATABASE_URL || 'postgres://kimfr:kf0204@localhost:5432/heart_app'
 const pgp = PgPromise({});
-const db = pgp(DATABASE_URL);
+// const db = pgp(DATABASE_URL);
 // const db = pgp(config);
-// const db = pgp({connectionString: DATABASE_URL, 
-// 			max:30,
-// 		ssl: {rejectUnauthorized : false}
-// });
+const db = pgp({connectionString: DATABASE_URL, 
+			max:30,
+		ssl: {rejectUnauthorized : false}
+});
 
 const PORT = process.env.PORT || 3010;
 
