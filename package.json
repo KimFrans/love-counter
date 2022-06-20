@@ -1,4 +1,8 @@
 {
+  "name": "server",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
   "dependencies": {
     "axios": "^0.27.2",
     "bcrypt": "^5.0.1",
@@ -9,5 +13,20 @@
     "express-session": "^1.17.3",
     "jsonwebtoken": "^8.5.1",
     "pg-promise": "^10.11.1"
-  }
+  },
+  "devDependencies": {},
+  "scripts": {
+    "start" : "node index.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/KimFrans/love-counter.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/KimFrans/love-counter/issues"
+  },
+  "homepage": "https://github.com/KimFrans/love-counter#readme"
 }
