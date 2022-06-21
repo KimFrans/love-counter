@@ -47,7 +47,7 @@ export default function app() {
 
                 axios
                     // .post(`http://localhost:3010/api/register/${this.username}/${this.password}`)
-                    .post(`http://localhost:3010/api/register`, {username, password})
+                    .post('http://localhost:3010/api/register', {username, password}, {withCredentials : true})
                     .then(
                         this.usermessage = 'Successfully registered',
                         this.reg = false,
@@ -106,7 +106,7 @@ export default function app() {
         loginF() {
             const { username, password } = this;
             axios
-                .post(`http://localhost:3010/api/login`, {
+                .post('http://localhost:3010/api/login', {withCredentials : true}, {
                     username, password
                 })
                 .then(r => r.data)
