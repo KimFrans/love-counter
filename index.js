@@ -11,7 +11,7 @@ const Pool = pg.Pool;
 const API = require('./api');
 const app = express();
 
-app.use(cors())
+app.use(cors({credentials:true, origin: ['http://localhost:3010/', 'https://kimfrans.github.io']}))
 app.use(express.static('public'));
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
