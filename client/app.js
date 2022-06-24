@@ -1,6 +1,7 @@
 import axios from "axios";
 
 export default function app() {
+    const URL_BASE =  import.meta.env.VITE_SERVER_URL
     return {
         info_message: '',
         error: false,
@@ -29,14 +30,13 @@ export default function app() {
         updateCount(username) {
             if (username) {
                 axios
-                    .post('http://localhost:3010/api/updateCount', { username, token: localStorage.getItem('token') })
+                    .post(`${URL_BASE}/api/updateCount`, { username, token: localStorage.getItem('token') })
                     .catch(e => console.log(e.message))
             }
 
         },
 
-        countUpdate() {
-            setInterval(() => {
+        countUpdate: setInterval(() => {
                 const user = this.getUser()
 
                 if (user.love_count > 0) {
@@ -50,7 +50,7 @@ export default function app() {
 
 
             }, 3000)
-        },
+        ,
 
 
         init() {
@@ -76,7 +76,7 @@ export default function app() {
             if (this.username && this.password != '') {
 
                 axios
-                    .post('http://localhost:3010/api/register', { username, password })
+                    .post(`${URL_BASE}/api/register`, { username, password })
                     .then(r => r.data)
                     .then(
                         r => {
@@ -125,18 +125,18 @@ export default function app() {
         },
 
         logoutF() {
-            // localStorage.clear();
+            localStorage.clear();
             this.login = true;
             this.open = false;
             this.username = ''
             this.password = ''
-            clearInterval(this.updateCount)
+            clearInterval(this.countUpdate)
         },
 
         loginF() {
             const { username, password } = this;
             axios
-                .post('http://localhost:3010/api/login', {
+                .post(`${URL_BASE}/api/login`, {
                     username, password
                 })
                 .then(r => r.data)
@@ -150,13 +150,13 @@ export default function app() {
                         this.open = true;
                         this.hearts = hearts
                         localStorage.setItem('token', token)
-                        this.countUpdate()
+                        localStorage.setItem('user', JSON.stringify(user))
+                        this.countUpdate
                         this.loveCounter = user.love_count
                         console.log(user);
 
                         this.token = token;
                         this.loggedInUser = user;
-                        localStorage.setItem('user', JSON.stringify(user))
                     }
                     // console.log(r);
                     // this.logout = true
@@ -184,7 +184,7 @@ export default function app() {
             user.love_count++;
 
             axios
-                .post('http://localhost:3010/api/loveCounter', { loveCounter, username, token: localStorage.getItem('token') })
+                .post(`${URL_BASE}/api/loveCounter`, { loveCounter, username, token: localStorage.getItem('token') })
                 .then(result => {
                     // console.log(result.data);
                     // console.log(result);
@@ -194,8 +194,6 @@ export default function app() {
 
                     this.hearts = result.data.hearts
                     // console.log(this.hearts);
-
-
 
                 })
 
