@@ -6,6 +6,9 @@
   "scripts": {
     "start": "node index.js"
   },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
   "dependencies": {
     "axios": "^0.27.2",
     "bcrypt": "^5.0.1",
