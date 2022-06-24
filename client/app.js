@@ -4,6 +4,7 @@ export default function app() {
     return {
         info_message: '',
         error: false,
+        hearts: '',
 
         login: true,
         loginBtn: '',
@@ -22,40 +23,73 @@ export default function app() {
         loginLink: '',
         regLink: '',
         loggedInUser: {},
-        logout:true,
+        logout: true,
+        loveCounter: 0,
 
-        init(){
-            // first check token in localstorage 
-            //  - set open to true
-            // - set login to true
-            if(localStorage['token'] === undefined) {
-                this.open = false;
-                this.login = true;
-            } else {
-                this.open = true;
-                this.login = false;
+        updateCount(username) {
+            if (username) {
+                axios
+                    .post('http://localhost:3010/api/updateCount', { username, token: localStorage.getItem('token') })
+                    .catch(e => console.log(e.message))
             }
 
         },
-        
+
+        countUpdate() {
+            setInterval(() => {
+                const user = this.getUser()
+
+                if (user.love_count > 0) {
+                    user.love_count--;
+                }
+                
+
+                localStorage.setItem('user', JSON.stringify(user))
+                this.loveCounter = user.love_count
+                console.log(user)
+                this.updateCount(user.username)
+
+            }, 3000)
+        },
+
+
+        init() {
+            // first check token in localstorage 
+            //  - set open to true
+            // - set login to true
+            if (localStorage['token'] === undefined) {
+                this.open = false;
+                this.login = true;
+            } else {
+                // this.countUpdate()
+                this.open = true;
+                this.login = false;
+            }
+            // this.updateCount()
+
+
+        },
+
 
         register() {
             const { username, password } = this;
             if (this.username && this.password != '') {
-                // console.log(this.username);
-                // console.log(this.password);
 
                 axios
-                    // .post(`http://localhost:3010/api/register/${this.username}/${this.password}`)
-                    .post('http://localhost:3010/api/register', {username, password}, {withCredentials : true})
+                    .post('http://localhost:3010/api/register', { username, password })
+                    .then(r => r.data)
                     .then(
-                        this.usermessage = 'Successfully registered',
-                        this.reg = false,
-                        this.login = true,
+                        r => {
+                            // this.usermessage = 'Successfully registered',
+                            this.usermessage = r.message,
+                                this.reg = false,
+                                this.login = true,
+                                console.log(r.success);
 
-                        console.log('Successfully registered'),
-                        console.log(this.username, this.password)
-                    )
+                            // console.log('Successfully registered')
+                            // console.log(this.username, this.password)
+
+                        })
                 setTimeout(() => {
                     this.usermessage = ''
                     // this.unauthorised = false
@@ -83,42 +117,47 @@ export default function app() {
         loginScreen() {
             this.login = true
             this.reg = false
-            // this.loginLink = false
-            // this.regLink = true
-
         },
 
         registerScreen() {
             this.login = false
             this.reg = true
-            // this.loginLink = true
-            // this.regLink = false
         },
 
-        logoutF(){
-            localStorage.clear();
+        logoutF() {
+            // localStorage.clear();
             this.login = true;
             this.open = false;
             this.username = ''
             this.password = ''
+            // clearInterval(this.updateCount)
+            clearInterval(this.updateCount)
         },
 
         loginF() {
             const { username, password } = this;
             axios
-                .post('http://localhost:3010/api/login', {withCredentials : true}, {
+                .post('http://localhost:3010/api/login', {
                     username, password
                 })
                 .then(r => r.data)
                 .then(r => {
 
-                    const { user, token } = r;
+                    const { user, token, hearts } = r;
+                    // console.log(r)
+                    this.usermessage = r.message
 
-                    if(r.token) {
+                    if (r.token) {
                         this.open = true;
+                        this.hearts = hearts
                         localStorage.setItem('token', token)
+                        this.countUpdate()
+                        this.loveCounter = user.love_count
+                        console.log(user);
+
                         this.token = token;
                         this.loggedInUser = user;
+                        localStorage.setItem('user', JSON.stringify(user))
                     }
                     // console.log(r);
                     // this.logout = true
@@ -126,10 +165,45 @@ export default function app() {
 
         },
 
-        counter(){
-            
+        getUser() {
+            return JSON.parse(localStorage.getItem('user'))
 
         },
+
+
+        love() {
+            const { loveCounter, getUser } = this;
+            const { username } = getUser()
+            if (!username) this.logout()
+            // this.loveCounter
+            // this.loveCounter++
+            // loveCounter++ 
+            console.log(loveCounter);
+
+            const user = this.getUser()
+            this.loveCounter = user.love_count
+            user.love_count++;
+
+            axios
+                .post('http://localhost:3010/api/loveCounter', { loveCounter, username, token: localStorage.getItem('token') })
+                .then(result => {
+                    // console.log(result.data);
+                    // console.log(result);
+                    // console.log(loveCounter);
+                    
+                    localStorage.setItem('user', JSON.stringify(user))
+
+                    this.hearts = result.data.hearts
+                    // console.log(this.hearts);
+
+
+
+                })
+
+
+        },
+
+
     }
 }
 
