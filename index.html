@@ -9,7 +9,7 @@
     <title>Vite App</title>
     <!-- <script src="./app.js"></script> -->
     
-    <script type="module" crossorigin src="/love-counter/assets/index.f91da51a.js"></script>
+    <script type="module" crossorigin src="/love-counter/assets/index.9649f612.js"></script>
     <link rel="stylesheet" href="/love-counter/assets/index.4874748e.css">
   </head>
   <body >
@@ -42,9 +42,9 @@
             <!-- Dropdown Contents... -->
             <button class=" btn btn-outline-info" x-show="logout" @click="logoutF"> logout </button>
             
-            <div x-data="loveCounter" class="heartApp">
+            <div  class="heartApp">
               <h3>Show some heart</h3>
-              <div x-text="hearts()" >
+              <div x-text="hearts" >
               </div>
               <div>
                 <button class=" btn btn-info" @click="love" >Show 💟</button>
@@ -53,8 +53,11 @@
             </div>
 
             <br>
+            <hr/>
 
-            <div x-data="quoteApp" class="quoteApp" >
+            <h3 align="center" x-text="loveCounter"> </h3>
+
+            <!-- <div x-data="quoteApp" class="quoteApp" >
               <h3>Quote App</h3>
               <button class=" btn btn-info" @click="getQuote()">Next quote 📢</button>
               <div class="quote">
@@ -63,7 +66,7 @@
                   <strong>by </strong><span x-text="quote.author"></span>
                 </div>
               </div>
-            </div>
+            </div> -->
 
         </div>
       </div>
