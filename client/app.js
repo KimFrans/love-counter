@@ -43,11 +43,11 @@ export default function app() {
                     user.love_count--;
                 }
                 
-
                 localStorage.setItem('user', JSON.stringify(user))
                 this.loveCounter = user.love_count
                 console.log(user)
                 this.updateCount(user.username)
+
 
             }, 3000)
         },
@@ -130,7 +130,6 @@ export default function app() {
             this.open = false;
             this.username = ''
             this.password = ''
-            // clearInterval(this.updateCount)
             clearInterval(this.updateCount)
         },
 
